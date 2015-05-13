@@ -1,4 +1,2 @@
 # Project_Complaint
-#This is for the purpose of OOJS related projects
-
-OOJS, MVC,SubPub
+This is for the purpose of OOJS related projects
