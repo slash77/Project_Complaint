@@ -1,0 +1,46 @@
+<html>
+<script>
+function en()
+{
+    alert('bazingaa!');
+}
+var veh=function(name)
+{
+	this.name=name;
+	console.log('Initiation of the object');
+};	
+
+veh.prototype.printName= function()
+{
+	console.log('Name is  ' + this.name);
+};
+
+function car(name,type)
+{
+	veh.call(this,name);
+	this.type=type;
+};
+car.prototype=Object.create(veh.prototype);
+car.prototype.constructor =car;
+car.prototype.printName=function()
+{
+	console.log('Name is  ' + this.name +' and the type is ' + this.type);
+};
+
+
+</script>
+<body> 
+<script>
+var v1=new veh('nissan');
+var v2=new veh('MS');	
+var v3=new veh('audi');
+var c1=new car('Merc','sedan');
+v1.printName();
+v3.printName();
+c1.printName();
+console.log(c1 instanceof veh);
+console.log(c1 instanceof car);
+</script>
+
+</body>
+</html>
