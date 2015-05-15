@@ -1,0 +1,33 @@
+
+
+
+<html>
+
+<body> 
+<script>
+var Model =
+	{
+		counter: 0
+	};
+ 
+var View = 
+	{
+  update: function(model) {
+    console.log(JSON.stringify(model));
+	}
+	};
+ 
+var Controller = {
+  model: Model,
+  view: View,
+  count: function () {
+    this.model.counter++;
+    this.view.update(this.model);
+  }
+};
+ 
+Controller.count();
+</script>
+
+</body>
+</html>
