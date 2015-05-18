@@ -8,6 +8,9 @@ a.test {
     <title>Demo</title>
 </head>
 <body>
+
+<h1>try shot!</h1>
+
     <a href="http://jquery.com/">jQuery</a>
     <script src="jquery-1.11.3.js"></script>
     <script>
@@ -25,9 +28,21 @@ a.test {
     $( window ).load(function() {
         console.log( "window loaded" );
     });	
-	 var a=$( "a" ).attr( "href" );
-	 console.log(a);
+	$( "h1" ).html( "New qwqwq paragraph!" );
+	var headings = $( "h1" );
+	console.log( headings.length );
+	// var a=$( "a" ).attr( "href" );
+	 //console.log(a);
 	//	$( "a" ).attr( "href", "http://google.com" );	
+	
+	/*Refining selections.
+	$( "div.foo" ).has( "p" );         // div.foo elements that contain <p> tags
+	$( "h1" ).not( ".bar" );           // h1 elements that don't have a class of bar
+	$( "ul li" ).filter( ".current" ); // unordered list items with class of current
+	$( "ul li" ).first();              // just the first unordered list item
+	$( "ul li" ).eq( 5 );              // the sixth
+	*/
+	
  
     </script>
 </body>
