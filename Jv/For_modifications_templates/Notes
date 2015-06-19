@@ -1,0 +1,3 @@
+In the java class query modifications have to be performed.
+After which the ajax call is to be implemented which fetches modified data set into the tree template.
+Here a func has to b implemented which disables the nodes as per the fetched data set.D 

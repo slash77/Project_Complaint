@@ -1,0 +1,955 @@
+@%'popup_wrapper.htm'@
+<html>
+<head>
+<title>@title@</title>
+</script>
+
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="Content-Type" content="text/html; charset=@CHARACTER_SET@">
+
+<LINK REL="stylesheet" HREF="@WEBROOT@/commonui_new.css" TYPE="text/css"/>
+<link rel="stylesheet" href="@WEBROOT@/ms_ecp_styles.css" type="text/css"/>	
+<link rel="stylesheet" href="@WEBROOT@/gui_styles.css" type="text/css"/>
+<script type="text/javascript" src="/appssdk/runtimes/jquery/1_7/jquery-1.7.min.js"></script>
+
+<style>
+	.no-leaf-icons .x-tree-icon-leaf {
+	    visibility: hidden;
+	    width: 2px; /* Adjust width to suit */
+	}
+</style>
+<style>
+	.buckettextred
+	{
+	font-size: 8pt;
+	font-weight: bold;
+	font-style: italic;
+	
+	}
+</style>	
+
+<style type="text/css"> 
+	.complete .x-tree-node-anchor span {
+	
+		color: #FF0000;
+		font-size: 8pt;
+		font-weight: bold;
+		font-style: italic;
+	}
+</style>
+
+<style type="text/css"> 
+	.grey .x-tree-node-anchor span {
+	
+		color: #808080;
+		font-size: 8.5pt;
+		font-weight: bold;
+		//font-style: italic;
+	}
+</style>
+
+</head>
+<body bgcolor="#EFEFEF" text="#000000" link="#000099" vlink="#000099" alink="#000099">
+<form name="form" method="post" action="Dmschecktree">
+	<div class="main">	
+    	<div id="tree"></div>		 
+    </div>
+<input type="hidden" name ="checkModel" id="checkModel" value="@#checkModel@">
+</form>
+</body>
+
+<style TYPE='text/css'>
+	.left-right-buttons .x-panel-btns .x-btn-right {
+	    float: right;
+}
+</style>
+
+<script type="text/javascript">
+
+//for IE8 below is the polyfill used for getElementsByClassName( Radio Implemetation)
+/*if (!document.getElementsByClassName) {
+  document.getElementsByClassName = function(search) {
+    var d = document, elements, pattern, i, results = [];
+    if (d.querySelectorAll) { // IE8
+      return d.querySelectorAll("." + search);
+    }
+    
+    if (d.evaluate) { // IE6, IE7
+      pattern = ".//*[contains(concat(' ', @class, ' '), ' " + search + " ')]";
+      elements = d.evaluate(pattern, d, null, 0, null);
+      while ((i = elements.iterateNext())) {
+        results.push(i);
+      }
+    } else {
+      elements = d.getElementsByTagName("*");
+      pattern = new RegExp("(^|\\s)" + search + "(\\s|$)");
+      for (i = 0; i < elements.length; i++) {
+        if ( pattern.test(elements[i].className) ) {
+          results.push(elements[i]);
+        }
+      }
+    }
+    return results;
+  }
+}*/
+var	dead_ids=[];
+var alert_flag='N';
+var UncheckFlag='false';
+Ext.onReady(function() { 
+  myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Loading please wait..."});
+  myMask.show();
+Ext.QuickTips.init();
+	//debugger;
+	var json = null;
+	var myMask;
+	var expannodes;
+	var pre_node;
+	var selected_node_ids=[];
+	var param = window.location.search.substring(1);
+	var param_arry=param.split('&');
+	var checkModel = param_arry[1].substring((param_arry[1].indexOf("="))+1);
+	var fild_name=param_arry[2].substring((param_arry[2].indexOf("="))+1);
+	var row_num=0;
+	var onload_id='',onload_text='';
+	var res_deadNode;
+	var Single_Sel_Ban='N';
+	var execute_me='N';
+	debugger;
+	try{
+		row_num=param_arry[3].substring((param_arry[3].indexOf("="))+1);
+	}catch(er){
+		row_num=0;
+	}
+	
+	if(row_num!=0){
+		var storedValues = eval('window.opener.F.'+fild_name+'.readStoredValue('+row_num+')');
+		var displayNames = eval('window.opener.F.'+fild_name+'.readDisplayedValue('+row_num+')');
+		storedValues=storedValues.replace(/RISK-/g,"");
+	}else{
+		debugger;
+		var storedValues = eval('window.opener.F.'+fild_name+'.readStoredValue()');
+		var displayNames = eval('window.opener.F.'+fild_name+'.readDisplayedValue()');
+		storedValues=storedValues.replace(/RISK-/g,"");
+	}
+	var selectedParam='empty';
+	var singleSelectNode='';
+	var singleSelectNodeLoad='';
+	var lRegExp='';
+	
+	if(storedValues!='')
+	{
+		selectedParam=storedValues.replace(/RISK-/g,"");
+	}
+
+	debugger;
+	var select_id_arr=storedValues.split(',');
+	// var response = Ext.Ajax.request({
+	// 				    async: false,
+	// 				    url: 'Risktree/ajax/deadNodesPath',
+	// 				    method: 'POST'
+	// 				});
+	// res_deadNode = Ext.decode(response.responseText);
+
+	
+
+	debugger;
+	Ext.Ajax.request({
+		url: 'Risktree/ajax/Message',
+		method: 'POST',
+		params:{
+			selectedIDS: ''
+		},
+		success: function(response, options) { 
+			debugger;
+			var id=storedValues;
+			onload_id=storedValues;
+			var text=displayNames;
+			onload_text=displayNames;
+			
+			var UncheckID='';
+			json = response.responseText;
+			json = json.replace(/&quot;/g,'\"');			
+			//debugger;
+			//alert('Work under progress ... - shail');
+			var json_str = [];
+			var json_split = json.split('$');
+			try{
+				for (var i = 0; i < json_split.length; i = i+2) {
+				    json_str.push(json_split[i]);
+				};
+				json=json_str.join('');
+			} catch(err){
+				//nothing;
+			}
+			
+			expannodes=json;
+
+			json=Ext.util.JSON.decode(json);
+			var flag=true;
+			var myloader = new Ext.tree.TreeLoader();
+			myloader.load = function(node, cb,scope) {
+				if(this.clearOnLoad){
+					while(node.firstChild){
+						node.removeChild(node.firstChild);
+					}
+				}
+				if(this.doPreload(node)){
+					this.runCallback(cb, scope || node, [node]);
+				}
+				cb();
+			}
+		var heading = new Ext.Toolbar({
+			
+				region : 'east',
+				height:30,
+				margins: '0 0 0 0',
+				
+				items:[
+				  
+					{
+						xtype: 'box',
+						id: 'title',
+						autoEl: {
+							html: 'Choose Risk'
+						}
+						,width:100
+					}
+				]
+			});
+
+		var tree = new Ext.tree.TreePanel({
+	 		id: 'treepanel_cust',
+	 		viewConfig: {
+		         toggleOnDblClick: false
+		    },
+	        animate:true, 
+	        autoScroll:true,
+	        containerScroll: true,
+	        border: false,
+			loader: myloader,
+			rootVisible: false,
+			listeners:{
+				beforedblclick: function(){
+					return false;
+				},
+												
+				afterrender: function(){
+					
+					// Ext.Ajax.request({
+					// 	url: 'Risktree/ajax/deadNodesPath',
+					// 	method: 'POST',
+					// 	success: function(response, options) {
+					// 		debugger;
+					// 		// var id=storedValues;
+					// 		// onload_id=storedValues;
+					// 		// var text=displayNames;
+					// 		// onload_text=displayNames;
+					// 		try{
+								
+					// 			res_deadNode=response.responseText;
+					// 			dead_ids =((res_deadNode.replace('[','')).replace(']','')).replace(/ /g,'');	
+					// 			dead_ids=dead_ids.split(',');	
+					// 			//console.log(dead_ids);	
+					// 			tree_exp=Ext.getCmp('treepanel_cust');
+					// 			for(var o=0;o<dead_ids.length;o++){				
+					// 				// if(Single_Sel_Ban=='Y'){
+					// 				// 	break;
+					// 				// }
+					// 				var expannodes_each = dead_ids[o].split("/");
+					// 				var expath="";
+					// 				for(var j=0;j<expannodes_each.length-1;j++){
+					// 					expath=expath+expannodes_each[j];
+					// 					var node_expand=tree_exp.getNodeById(expath);
+					// 					try{
+					// 						node_expand.expand();
+					// 					}
+					// 					catch(err){
+					// 						//nothing
+					// 					}
+					// 					expath=expath+"/";
+					// 				}
+					// 				node=tree_exp.getNodeById(dead_ids[o]);
+					// 				//below coede to remove the ID and Text of the expired node from being processed in the template
+					// 				debugger;
+					// 				if(id.search(node.attributes.ID)!=-1){
+										
+					// 					text=','+text+',';
+					// 					text=text.replace(','+node.text+',',',');
+					// 					var fir_indx=text.indexOf(',');
+					// 					if(fir_indx!=0){
+					// 						text=','+text;
+					// 					}
+					// 					var las_indx=text.lastIndexOf(',')+1;
+					// 					if(las_indx!=text.length){
+					// 						text=text+',';
+					// 					}
+					// 					text=text.substr(1,text.length);
+					// 					text=text.substr(0,text.length-1)
+					// 					id=','+id+',';
+					// 					id=id.replace(','+node.attributes.ID+',',',');
+					// 					var fir_indx=id.indexOf(',');
+					// 					if(fir_indx!=0){
+					// 						id=','+id;
+					// 					}
+					// 					var las_indx=id.lastIndexOf(',')+1;
+					// 					if(las_indx!=id.length){
+					// 						id=id+',';
+					// 					}
+					// 					id=id.substr(1,id.length);
+					// 					id=id.substr(0,id.length-1);
+					// 					if(checkModel=='S'){
+					// 						Single_Sel_Ban='Y';
+					// 						alert_flag='Y';
+					// 					}
+					// 				}
+					// 				node.ui.checkbox.disabled = true;
+					// 				//toggleCheck(node,false);
+					// 				node.ui.checkbox.checked=false;
+					// 				node.getUI().addClass('grey');
+
+					// 			}
+					// 			debugger;
+								
+					// 			for(var f=0;f<select_id_arr.length;f++){
+					// 				if(select_id_arr[f]!=''){
+					// 					for (var p = 0; p < dead_ids.length; p++) {								
+					// 						//var index=dead_ids[p].search(select_id_arr[f]);
+					// 						if(dead_ids[p]==select_id_arr[f]){
+					// 							alert_flag='Y';
+					// 							select_id_arr=select_id_arr.pop(f);
+					// 							break;
+					// 						}else{
+					// 							var sel_id="/"+select_id_arr[f];
+					// 							var len_sel_id=sel_id.length;
+					// 							var ded_id=dead_ids[p];
+					// 							var search_len=ded_id.search(sel_id);
+					// 							var tot_len=search_len+len_sel_id;
+					// 							if(tot_len==ded_id.length && search_len!=-1){
+					// 								alert_flag='Y';
+					// 								select_id_arr=select_id_arr.pop(f);
+					// 								break;
+					// 							}
+					// 						}
+					// 					};
+					// 				}
+					// 				if(alert_flag=='Y'){
+					// 					break;
+					// 				}
+
+					// 			}
+								
+					// 			//var srcTre=Ext.getCmp('treepanel_cust');
+					// 			//tree_exp.collapseAll();
+					// 		}catch(err){
+					// 			//nothing...
+					// 		}			
+							 
+					// 	}
+					// });
+	
+
+				//below block written to expand the Tree for the slected nodes : shail
+					debugger;
+					if(storedValues !=''){					
+						var select_id_arr=storedValues.split(',');
+						var count=0;
+						for (var ids = 0; ids<select_id_arr.length; ids++) {
+								var search_node='/'+select_id_arr[ids]+'"';
+								var index_of=expannodes.search(search_node);
+								if(index_of != -1){
+									var stop_char='"';				
+									while(expannodes.charAt(--index_of)!=stop_char){}
+									selected_node_ids[count]=expannodes.substring(index_of+1,expannodes.indexOf('"',index_of+1));
+									if(checkModel=='S'){
+										singleSelectNodeLoad=selected_node_ids[count];
+									}
+									count++;
+								}
+								else{
+									if(checkModel=='S'){
+										singleSelectNodeLoad=select_id_arr[ids];
+									}
+									
+									
+								}
+						}
+						var tree_exp=Ext.getCmp('treepanel_cust');
+						debugger;
+						for(var i=0;i<selected_node_ids.length;i++){
+							var expannodes_each = selected_node_ids[i].split("/");
+							var expath="";
+								for(var j=0;j<expannodes_each.length-1;j++){
+									expath=expath+expannodes_each[j];
+									var node_expand=tree_exp.getNodeById(expath);
+									try{
+										node_expand.expand();
+									}
+									catch(err){
+										
+									}
+									expath=expath+"/";
+								}
+								var node_expand=tree_exp.getNodeById(selected_node_ids[i]);					
+								// node_expand.ui.toggleCheck('checked');	
+								node_expand.ui.checkbox.checked=true;		
+								//toggleCheck(node_expand,true);
+						}
+						debugger;
+							/*if(selected_node_ids.length!=select_id_arr.length && selected_node_ids.length>0){
+								for(var i=0;i<select_id_arr.length;i++){
+									for(var j=0;j< selected_node_ids.length;j++){
+										var index_of=selected_node_ids[j].indexOf(select_id_arr[i]);
+										if(index_of == -1){
+											var node_expand=tree_exp.getNodeById(select_id_arr[i]);								
+											toggleCheck(node_expand,true);
+										}
+									}
+								}
+							}*/
+								try{
+									for(var j=0;j<select_id_arr.length;j++){											
+										try{
+											var node_expand=tree_exp.getNodeById(select_id_arr[j]);
+											node_expand.ui.checkbox.checked=true;//toggleCheck(node_expand,true);
+										}catch(err){
+
+										}
+									}
+
+									if(onload_id!=''){
+			                        	id=onload_id;
+			                        	onload_id='';
+		                        	}
+		                        	if(onload_text!=''){
+			                        	text=onload_text;
+			                        	onload_text='';
+		                        	}
+		                        	
+								}catch(err){
+
+								}
+							
+						
+						//var orgname=[];
+						//var id_from_db=[];
+						
+					}
+					debugger;
+					exeute_me='Y';
+					setTimeout(function() {
+						myMask.hide();
+						// if(alert_flag=='Y'){
+						// 	if(checkModel=='S'){
+						// 		Ext.Msg.show({
+						//            title      : 'Alert',
+						//            msg        : 'The Selected Value is Expired Kindly Select A New Value',
+						//            width      : 300,
+						//            buttons    : Ext.MessageBox.OK,
+						//            icon       : Ext.MessageBox.INFO
+						//         });
+						// 	}else{
+						// 		Ext.Msg.show({
+						//            title      : 'Alert',
+						//            msg        : 'One (or) More Selected Value(s) are Expired Kindly Select New Value(s)',
+						//            width      : 300,
+						//            buttons    : Ext.MessageBox.OK,
+						//            icon       : Ext.MessageBox.INFO
+						//         });
+						// 	}
+						// 	alert_flag='N';
+						// }
+					}, 1500);						
+				},					
+				/*click: function(n) {// this block is helpful when radio UI implemented ( was working in Crome and higher versions of IE)
+				 	//debugger;
+			        if (checkModel=='S') {
+			       		if (singleSelectNodeLoad!='') {
+			       			var n_old=Ext.getCmp('treepanel_cust').getNodeById(singleSelectNodeLoad);
+			       			toggleCheck(n_old,false);
+			       			singleSelectNodeLoad='';
+			       			n.ui.toggleCheck(true);
+							n.attributes.checked=true;
+					        singleSelectNode=n;
+					        id=n.attributes.ID;
+					        text=n.attributes.text;
+
+			       		} else{
+			       			if(singleSelectNode!='')
+				        		toggleCheck(singleSelectNode,false);
+					        n.ui.toggleCheck(true);
+							n.attributes.checked=true;
+					        singleSelectNode=n;
+					        id=n.attributes.ID;
+					        text=n.attributes.text;
+			       		};
+			       }  
+	            },*/					
+				checkchange:function(node){
+					debugger;
+					if(flag){
+						if (checkModel=='S') {
+							if(id==''){
+                            	id=node.attributes.ID;
+                            	text=node.attributes.text;
+	                        }
+	                        else{
+	                        	try{
+	                        			var uncheckflag_S='false';                          
+		                                if(id==node.attributes.ID)
+		                                {
+		                                    UncheckFlag='true';
+		                                }		                            
+			                            if (UncheckFlag=='true') {
+				                            id='';
+				                            text='';
+				                            UncheckFlag='false';
+			                            }else{
+			                            	toggleCheck(tree.root,false,node.id);
+				                            id=node.attributes.ID;
+				                            text=node.attributes.text;
+			                            }
+	                        											
+								} 
+								catch(e){									
+									window.close();
+								}
+	                        }
+						}else{
+							if(id==''){
+                            	id=node.attributes.ID;
+	                        }
+	                        else{
+	                            //check if id is already present. If present then it is unchecking the checked one
+	                            var temp = node.attributes.ID;
+	                            var idsplitarray = id.split(',');
+	                            for (var i = 0; i < idsplitarray.length; i++){
+	                                if(idsplitarray[i]==temp)
+	                                {
+	                                    UncheckFlag='true';
+	                                    UncheckID=i;
+	                                    break;
+	                                }
+	                            }
+	                            
+	                            //if unchecked then remove it from the selected id
+	                            if(UncheckFlag=='true'){
+	                                idsplitarray.splice(UncheckID, 1);
+	                                id=idsplitarray.join();
+	                            }
+	                            //else add the id
+	                            if(UncheckFlag=='false'){
+		                            id=id+','+node.attributes.ID;
+		                            //sel_node_selall.push(node.attributes.id);
+	                            }
+
+		                        }
+		                         //if unchecked then add the values
+		                        if(UncheckFlag=='false'){   
+		                            if(text==''){
+		                                text=node.attributes.text;
+		                            }
+		                            else{
+		                                text=text+','+node.attributes.text;
+		                            }
+		                        }
+		                        //if checked then remove the value from the text
+		                        if(UncheckFlag=='true'){
+		                            UncheckFlag='false';
+		                            var textsplitarray = text.split(',');
+		                            textsplitarray.splice(UncheckID, 1);
+		                            text=textsplitarray.join();
+								}
+
+
+
+						}					
+					}
+				}
+			}
+        });
+
+		function SelectToParent()
+		{
+			try{	
+				debugger;
+				if(id.length>0){
+					id='RISK-'+id;
+					id=id.replace(/,/g,",RISK-")
+				}
+				
+				parent.window.opener.callToParent(fild_name,id,text,row_num);
+				parent.window.opener.focus();
+				parent.window.close();
+			} 
+			catch(e){					
+				window.close();
+			}
+		}
+
+		function Clear_All()
+		{
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Clearing all please wait..."});
+			myMask.show();
+			setTimeout(function() {
+				var tree_exp=Ext.getCmp('treepanel_cust');
+				for (var i = 0; i < cacase_nodes_for_search.length; i++) {
+					cacase_nodes_for_search[i].getUI().removeClass('complete');
+					// for (var q = 0; q < dead_ids.length; q++) {
+					// 		if(dead_ids[q]==cacase_nodes_for_search[i].id){
+					// 			//tree_exp.getNodeById(match_id_array[i]).getUI().removeClass('grey');	
+					// 			tree_exp.getNodeById(dead_ids[q]).getUI().addClass('grey');
+								
+					// 		}						
+					// 	};	
+				};
+				try{
+					toggleCheck(tree.root,false);
+					id='';
+					text='';
+				} 
+				catch(e){
+					
+					window.close();
+				}
+				setTimeout(function() {myMask.hide();}, 1000);
+			}, 100);
+			
+		}
+
+		function SelectAllChildrenParent(){
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Selecting all the Children please wait..."});
+			myMask.show();
+			debugger;
+			setTimeout(function() {
+				var expannodes_edit=expannodes;
+				var selected_node_selall=[];
+				try{
+					if(id !='')
+					{
+						var select_id_arr=id.split(',');
+						
+						var count=0;
+						for (var ids = 0; ids<select_id_arr.length; ids++) {
+							var index_child=0;
+							expannodes=expannodes_edit;
+							index_of=0;
+							index_of_lvl1=0;
+							var decide_str='/'+select_id_arr[ids]+'/';
+							var decide_index=expannodes.search(decide_str);						
+							if(decide_index != -1){
+								while(expannodes.length > 1 && index_of != -1 ){
+									var search_node='/'+select_id_arr[ids]+'/';
+									var index_of=expannodes.search(search_node);										
+										if(index_of != -1){
+											var stop_char='"';
+											index_child=index_of;				
+											while(expannodes.charAt(--index_of)!=stop_char){}
+											while(expannodes.charAt(++index_child)!=stop_char){}					
+											selected_node_selall[count]=expannodes.substring(index_of+1,index_child);
+											count++;
+											expannodes=expannodes.substring(index_child,expannodes.length);
+										}
+								}
+							}							
+							else{								
+								while(expannodes.length > 1 && index_of_lvl1 != -1){
+									var search_node='"'+select_id_arr[ids]+'/';
+									var index_of_lvl1=expannodes.search(search_node);								
+										if(index_of_lvl1 != -1){
+											var stop_char='"';
+											index_child=index_of_lvl1;				
+											while(expannodes.charAt(++index_of_lvl1)!=stop_char){}
+											selected_node_selall[count]=expannodes.substring(index_child+1,index_of_lvl1);
+											count++;
+											expannodes=expannodes.substring(index_of_lvl1,expannodes.length);
+									}
+								}
+							}
+						}
+					}
+					var tree_exp=Ext.getCmp('treepanel_cust');
+					for(var i=0;i<selected_node_selall.length;i++){
+						var expannodes_each = selected_node_selall[i].split("/");
+						var expath="";
+							for(var j=0;j<expannodes_each.length-1;j++){
+								expath=expath+expannodes_each[j];
+								var node_expand=tree_exp.getNodeById(expath)
+								try{
+									node_expand.expand();
+								}
+								catch(err){
+									//console.log('Error in expanding the Node'+node_expand);
+								}
+								expath=expath+"/";
+							}									
+					}
+					debugger;
+					var tree_exp=Ext.getCmp('treepanel_cust');
+					var select_all_alert='N';
+					for (var i = 0; i < selected_node_selall.length; i++) {	
+						// alert_flag='N';
+						// for (var p = 0; p < dead_ids.length; p++) {								
+						// 	//var index=dead_ids[p].search(selected_node_selall[i]);
+						// 	if(dead_ids[p]==selected_node_selall[i]){
+						// 		alert_flag='Y';
+						// 		select_all_alert='Y';
+						// 		break;
+						// 	}
+						// };
+						// if(alert_flag=='N'){
+						// 	// toggleCheck(tree_exp.getNodeById(selected_node_selall[i]),true);
+						// 	var node=tree_exp.getNodeById(selected_node_selall[i]);
+						// 	node.ui.checkbox.checked=true;
+						// 	var index_of= id.indexOf(node.attributes.ID);
+						// 	if (index_of == -1) {// for Bug 171606
+						// 		id=id+','+node.attributes.ID;
+						// 		text=text+','+node.attributes.text;
+						// 	}
+
+						// }					
+						
+					var node=tree_exp.getNodeById(selected_node_selall[i]);
+							node.ui.checkbox.checked=true;
+							var index_of= id.indexOf(node.attributes.ID);
+							if (index_of == -1) {// for Bug 171606
+								id=id+','+node.attributes.ID;
+								text=text+','+node.attributes.text;
+							}
+					}
+					expannodes=expannodes_edit;
+					setTimeout(function() {
+						myMask.hide();
+						// if(select_all_alert=='Y'){
+						// 	Ext.Msg.show({
+					 //           title      : 'Alert',
+					 //           msg        : "One (or) More Child are Expired and Won't be Selected",
+					 //           width      : 300,
+					 //           buttons    : Ext.MessageBox.OK,
+					 //           icon       : Ext.MessageBox.INFO
+					 //        });
+						// }
+					}, 1000);
+
+					
+								
+				} 
+				catch(e){					
+					//window.close();
+				}
+			}, 10);	
+	    }
+
+		function toggleCheck(node,isCheck,nodeId)
+		{
+			//debugger;
+			flag=false;
+			if(node)
+			{
+				var args=[isCheck];
+				node.cascade(function(){
+					c=args[0];
+					if(nodeId!=this.id){
+						this.ui.toggleCheck(c);
+						this.attributes.checked=c;
+						var index_of= id.indexOf(this.attributes.ID);
+						if (index_of == -1) {
+							id=id+','+this.attributes.ID;
+							text=text+','+this.attributes.text;
+						}
+					}
+				},null,args);
+			}
+			flag=true;
+			return true;
+		}
+        // set the root node
+        var root = new Ext.tree.AsyncTreeNode({
+            text: 'Ext JS',
+            draggable:false, // disable root node dragging
+            id:'src',
+			children: json
+        });
+        tree.setRootNode(root);
+
+		var topbar = new Ext.Toolbar({			
+			region : 'east',
+			height:30,
+			margins: '0 0 0 0',				
+			items:[
+				{
+                        text: 'Done',
+                        id: 'doneBtn',
+                        tooltip: 'Done',
+                        handler: SelectToParent
+                    },
+                    {   xtype: 'tbseparator',
+                        hidden:checkModel=='S'?true:false
+                    },
+                    {
+                                text: 'Select all the Children',
+                                id: 'doneallbtn',
+                                hidden:checkModel=='S'?true:false,
+                                tooltip: 'Selects all the Children',
+                        handler: SelectAllChildrenParent
+                    },
+                    {          xtype: 'tbseparator'},
+                    {                                  
+                                text: checkModel=='S'?'Clear':'Clear All',
+                                id: 'clearall',
+                                tooltip: checkModel=='S'?'Clear':'Clear All',
+                        handler: Clear_All
+                    },
+                    {xtype: 'tbseparator'},
+                    { 
+                                xtype: 'textfield',
+                                id: 'searchtext',
+                                fieldLabel: 'Node',
+                                enableKeyEvents: true,
+                                emptyText: 'Search...',
+                                listeners: {
+                                                keypress : function(textfield, e, options) {
+                                                                ////debugger;
+				                                                if (e.keyCode == 13) {
+				                                                    e.stopEvent();
+				                                                    filterTree();
+				                                                }
+                                            }
+                               }
+                    },
+                    {
+                                text: 'Search',
+                                id: 'search',
+                                tooltip: 'Search',
+                        handler: filterTree
+                    }            
+			]
+    
+		});
+		heading.render('tree');
+		topbar.render('tree');
+        tree.render('tree');
+		tree.getRootNode().expand(); 	
+	}
+  });	 
+});
+	var orgname=[];
+	var id_from_db=[];
+	
+	Ext.Ajax.request({
+		url: 'Risktree/ajax/expandPath',
+		method: 'POST',
+		success: function(response, options) {
+			debugger;
+			
+			var Final_Array=response.responseText;
+			
+			orgname	=eval(Final_Array.substring(Final_Array.indexOf('[')+1,Final_Array.indexOf(']')+1));
+			id_from_db =eval(Final_Array.substring(Final_Array.indexOf('],')+3,Final_Array.indexOf(']]')+1));
+								
+		}
+	});	
+//setTimeout(function() {
+
+
+//}, 5000);
+
+	
+	var cacase_nodes_for_search=[];
+	var cn=0;
+	function filterTree() {	
+	debugger;	
+
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Searching please wait..."});
+		myMask.show();		
+		setTimeout(function() {
+			debugger;
+			var tree_exp=Ext.getCmp('treepanel_cust');
+			for (var i = 0; i < cacase_nodes_for_search.length; i++) {
+				try{
+					cacase_nodes_for_search[i].getUI().removeClass('complete');	
+					
+						for (var q = 0; q < dead_ids.length; q++) {
+							if(dead_ids[q]==cacase_nodes_for_search[i].id){
+								//tree_exp.getNodeById(match_id_array[i]).getUI().removeClass('grey');	
+								tree_exp.getNodeById(dead_ids[q]).getUI().addClass('grey');
+								
+							}						
+						};	
+					
+				}catch(e){
+					//nothing;
+				}
+				
+			};
+			cacase_nodes_for_search= [];
+			cn=0;
+			var aTextBox=Ext.getCmp('searchtext');
+			var aText='';
+			if(aTextBox != undefined ){
+				aText=aTextBox.getValue();
+			}
+			if(aText==''){
+				myMask.hide();
+			}else{
+				var srcTre=Ext.getCmp('treepanel_cust');
+				srcTre.collapseAll();
+				var match_id_array = [];
+				var a=0;
+				var lRegExp = new RegExp( Ext.escapeRe( aText ), 'i' );
+				for (var i = 0; i < orgname.length; i++) {
+					// if( lRegExp.test( orgname[i] ) ) {
+					if(lRegExp.test(orgname[i].substr(0,orgname[i].indexOf('$')))){
+						match_id_array[a]=id_from_db[i];
+						a++;
+					}
+				};
+				var tree_exp=Ext.getCmp('treepanel_cust');
+				if(match_id_array.length>0){
+					for(var i=0;i<match_id_array.length;i++){							
+						var expannodes_each = match_id_array[i].split("/");
+						var expath="";
+						for(var j=0;j<expannodes_each.length-1;j++){
+							expath=expath+expannodes_each[j];
+							var node_expand=tree_exp.getNodeById(expath);
+							try{
+								node_expand.expand();
+							}
+							catch(err){
+								
+							}
+							expath=expath+"/";
+						}
+				      	try{
+				      	 cacase_nodes_for_search[cn]=tree_exp.getNodeById(match_id_array[i]);
+				      	 cn++;
+				      	var SETOUT='N';
+						// for (var q = 0; q < dead_ids.length; q++) {
+						// 	if(dead_ids[q]==match_id_array[i]){
+						// 		tree_exp.getNodeById(match_id_array[i]).getUI().removeClass('grey');	
+						// 		tree_exp.getNodeById(match_id_array[i]).getUI().addClass('complete');
+						// 		SETOUT='N';
+						// 		break;
+						// 	}else{
+						// 		SETOUT='Y';
+						// 	}
+						// };
+				      	 // if(SETOUT=='Y'){
+				      	 	tree_exp.getNodeById(match_id_array[i]).getUI().addClass('complete');
+				      	 	// SETOUT='N';
+				      	 // }
+				      	
+						}
+						catch(err){
+
+						}
+								
+					}	
+				}
+			}
+			setTimeout(function() {myMask.hide();}, 1000);
+		}, 100);
+	}
+</script>
+</html>	
+	
