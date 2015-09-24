@@ -1,0 +1,89 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                
+                var t1 = new Ext.Panel({
+                    region: 'west',
+                    width: 200,
+                    html: '<h1>Test</h1>'
+                });
+                new Ext.Viewport({
+                    layout: 'border',
+                    items: [
+                        t1,
+                        {
+                            region: 'east',
+                            width: 200
+                        },
+                        {
+                            id: 'wildTab',
+                            region: 'center',
+                            xtype: 'tabpanel',
+                            activeItem: 0,
+                            defaults: {
+                                autoScroll: true,
+                            },
+                            items: [
+                                {
+                                    title: "Lion",
+                                    autoLoad: 'lion.html'
+                                },
+                                {
+                                    title: "Tigger",
+                                    contentEl: "tigerDiv",
+                                    closable: true
+                                },
+                                {
+                                    title: "Eagle",
+                                    autoLoad: 'eagle.html',
+                                    disabled: true
+                                }
+                            ]
+                        }
+                    ]
+                });            
+            });
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+        
+        <div id="tigerDiv">
+            <img src="images/tiger.jpg" />
+            
+            <p>
+            The tiger (Panthera tigris) is the largest cat species, reaching a total body length of up to 3.38 m (11.1 ft) over curves and weighing up to 388.7 kg (857 lb) in the wild. Its most recognisable feature is a pattern of dark vertical stripes on reddish-orange fur with a lighter underside. The species is classified in the genus Panthera with the lion, leopard, jaguar and snow leopard. Tigers are apex predators, primarily preying on ungulates such as deer and bovids. They are territorial and generally solitary but social animals, often requiring large contiguous areas of habitat that support their prey requirements. This, coupled with the fact that they are indigenous to some of the more densely populated places on Earth, has caused significant conflicts with humans.
+            </p>
+            <p>
+            The tiger (Panthera tigris) is the largest cat species, reaching a total body length of up to 3.38 m (11.1 ft) over curves and weighing up to 388.7 kg (857 lb) in the wild. Its most recognisable feature is a pattern of dark vertical stripes on reddish-orange fur with a lighter underside. The species is classified in the genus Panthera with the lion, leopard, jaguar and snow leopard. Tigers are apex predators, primarily preying on ungulates such as deer and bovids. They are territorial and generally solitary but social animals, often requiring large contiguous areas of habitat that support their prey requirements. This, coupled with the fact that they are indigenous to some of the more densely populated places on Earth, has caused significant conflicts with humans.
+            </p>
+            
+            <p>
+            The tiger (Panthera tigris) is the largest cat species, reaching a total body length of up to 3.38 m (11.1 ft) over curves and weighing up to 388.7 kg (857 lb) in the wild. Its most recognisable feature is a pattern of dark vertical stripes on reddish-orange fur with a lighter underside. The species is classified in the genus Panthera with the lion, leopard, jaguar and snow leopard. Tigers are apex predators, primarily preying on ungulates such as deer and bovids. They are territorial and generally solitary but social animals, often requiring large contiguous areas of habitat that support their prey requirements. This, coupled with the fact that they are indigenous to some of the more densely populated places on Earth, has caused significant conflicts with humans.
+            </p>
+            
+            <p>
+            The tiger (Panthera tigris) is the largest cat species, reaching a total body length of up to 3.38 m (11.1 ft) over curves and weighing up to 388.7 kg (857 lb) in the wild. Its most recognisable feature is a pattern of dark vertical stripes on reddish-orange fur with a lighter underside. The species is classified in the genus Panthera with the lion, leopard, jaguar and snow leopard. Tigers are apex predators, primarily preying on ungulates such as deer and bovids. They are territorial and generally solitary but social animals, often requiring large contiguous areas of habitat that support their prey requirements. This, coupled with the fact that they are indigenous to some of the more densely populated places on Earth, has caused significant conflicts with humans.
+            </p>
+            
+            <p>
+            The tiger (Panthera tigris) is the largest cat species, reaching a total body length of up to 3.38 m (11.1 ft) over curves and weighing up to 388.7 kg (857 lb) in the wild. Its most recognisable feature is a pattern of dark vertical stripes on reddish-orange fur with a lighter underside. The species is classified in the genus Panthera with the lion, leopard, jaguar and snow leopard. Tigers are apex predators, primarily preying on ungulates such as deer and bovids. They are territorial and generally solitary but social animals, often requiring large contiguous areas of habitat that support their prey requirements. This, coupled with the fact that they are indigenous to some of the more densely populated places on Earth, has caused significant conflicts with humans.
+            </p>
+        </div>
+    </body>
+</html>
+                 
+                 
+                 
+                 
+                 

@@ -1,0 +1,43 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+      <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+              
+                new Ext.Viewport({
+                    layout: 'column',
+                    items: [
+                        {
+                            title: 'Column 1',
+                            width: 150,
+                            height: 300
+                        },
+                        {
+                            title: 'Column 2',
+                            columnWidth: .8,
+                            //autoLoad: 'dummy-content.html'
+                        },
+                        {
+                            title: 'Column 3',
+                            columnWidth: .2
+                        }
+                    ]
+                });
+           
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

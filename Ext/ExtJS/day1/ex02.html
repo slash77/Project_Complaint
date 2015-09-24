@@ -1,0 +1,44 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+    
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        
+        <script type="text/javascript">
+            
+            Ext.onReady(function(){
+                var cfg = {
+                    title: "Extjs Training",
+                    modal: true,
+                    closable: false,
+                    msg: "Is Ext UI Rich!!!",
+                    buttons: Ext.MessageBox.YESNO,
+                    icon: Ext.Msg.QUESTION,
+                    fn: function(btn){
+                        console.log("Button " + btn 
+                            + " was clicked!");
+                    }
+                };
+                Ext.Msg.show(cfg);
+           
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

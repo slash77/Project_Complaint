@@ -1,0 +1,60 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+    
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                var p1 = {
+                    name: "Vinod",
+                    gender: "Male"
+                };
+                
+                var p2 = {
+                    name: null,
+                    city: "Mysore"  
+                };
+                
+                var p3 = {
+                    name: "Smith",
+                    city: "Newyork"
+                };
+                
+               
+                
+                Ext.applyIf(p1, {name: "Ram", city: "Delhi"});
+                console.log(p1);
+                Ext.applyIf(p2, {name: "Ram", city: "Delhi"});
+                console.log(p2);
+                Ext.applyIf(p3, {name: "Ram", city: "Delhi"});
+                console.log(p3);
+                
+                
+                Ext.apply(p1, {name: "Ram", city: "Delhi"});
+                console.log(p1);
+                Ext.apply(p2, {name: "Ram", city: "Delhi"});
+                console.log(p2);
+                Ext.apply(p3, {name: "Ram", city: "Delhi"});
+                console.log(p3);
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

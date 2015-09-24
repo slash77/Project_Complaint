@@ -1,0 +1,56 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+    
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                
+                Ext.namespace("co.vinod");
+                co.vinod.Person = Ext.extend(Object, {
+                    
+                    constructor: function(config){
+                        
+                        Ext.applyIf(config, {
+                            name: "",
+                            city: "Bangalore",
+                            email: ""
+                        });
+                        
+                        Ext.apply(this, config);
+                        
+                    },
+                    
+                    log: function(){
+                        console.log("Name = " + this.name
+                            + ", City = " + this.city 
+                            + ", Email = " + this.email);
+                    }
+
+                });
+              
+                var p1 = new co.vinod.Person({name: "Vinod"});
+                p1.log();
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

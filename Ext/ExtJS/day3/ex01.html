@@ -1,0 +1,343 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+        
+
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+    
+        <link type="text/css"
+              rel="stylesheet"
+              href="../ext-3.2.1/examples/ux/css/RowEditor.css" />
+        
+        <style>
+        
+            .myIconClass {
+                background-image: url(images/w.png);
+            }
+        </style>
+    
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/examples/ux/RowEditor.js" >
+        </script>
+        
+        <script type="text/javascript">
+        
+            var Product = Ext.data.Record.create([
+                {name: "productId", type: "int", mapping: "PRODUCT_ID"},
+                {name: "productName", type: "string", mapping: "PRODUCT_NAME"},
+                {name: "quantityPerUnit", type: "string", mapping: "QUANTITY_PER_UNIT"},
+                {name: "categoryId", type: "int", mapping: "CATEGORY_ID"},
+                {name: "supplierId", type: "int", mapping: "SUPPLIER_ID"},
+                {name: "unitPrice", type: "float", mapping: "UNIT_PRICE"},
+                {name: "unitsInStock", type: "int", mapping: "UNITS_IN_STOCK"},
+                {name: "unitsOnOrder", type: "int", mapping: "UNITS_ON_ORDER"},
+                {name: "reorderLevel", type: "int", mapping: "REORDER_LEVEL"},
+                {name: "discontinued", type: "int", mapping: "DISCONTINUED"}
+            ]);
+            
+            var productStore = new Ext.data.Store({
+                restful: true,
+                url: "http://172.27.40.72:82/products",
+                reader: new Ext.data.JsonReader({
+                    idProperty: "PRODUCT_ID",
+                    successProperty: "success",
+                    fields: Product,
+                    root: "data"
+                }),
+                writer: new Ext.data.JsonWriter({
+                    encode: false,
+                    writeAllFields: true
+                }),
+                autoLoad: true,
+                autoSave: true
+            });
+            
+            var editor = new Ext.ux.grid.RowEditor();
+            
+            var grid = new Ext.grid.GridPanel({
+                plugins: [
+                    editor
+                ],
+                listeners: {
+                    celldblclick: function(self, r, c, evt){
+                        var sm = self.getSelectionModel();
+                        var rec = sm.getSelected();
+                        console.log(rec.data);
+                    }
+                },
+                region: "center",
+                store: productStore,
+                columns: [
+                    new Ext.grid.RowNumberer(),
+                    {
+                        header: "Product name",
+                        dataIndex: "productName",
+                        width: 150,
+                        sortable: true,
+                        editor: {
+                            xtype: "textfield",
+                            listeners: {
+                                focus: function(){
+                                    console.log("Got the focus");
+                                }
+                            }
+                        }
+                    },
+                    {
+                        header: "Quantity per unit",
+                        dataIndex: "quantityPerUnit",
+                        width: 200,
+                        sortable: true,
+                        editor: {
+                            xtype: "textfield"   
+                        }
+                    },
+                    {
+                        header: "Unit price",
+                        dataIndex: "unitPrice",
+                        width: 100,
+                        sortable: true,
+                        editor: {
+                            xtype: "textfield"   
+                        }
+                    },
+                    {
+                        header: "Discontinued",
+                        dataIndex: "discontinued",
+                        width: 100,
+                        sortable: true,
+                        renderer: function(v){
+                            return v==0?"No":"Yes";
+                        }
+                    }
+                ]
+            });
+            
+//            var categoryStore = new Ext.data.Store({
+//                autoLoad: true,
+//                url: "http://172.27.40.72:82/categories",
+//                reader: new Ext.data.JsonReader({
+//                    fields: [
+//                        {name: "catId", type: "int", mapping: "category_id"},
+//                        {name: "catName", type: "string", mapping: "category_name"}
+//                    ]
+//                })
+//            });
+            var frm = new Ext.form.FormPanel({
+                bodyStyle: {
+                    padding: "20px"
+                },
+                items: [
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Product id",
+                        dataIndex: "productId",
+                        allowBlank: false,
+                        blankText: "Product id is mandatory!"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Product name",
+                        dataIndex: "productName",
+                        allowBlank: false,
+                        blankText: "Product name is mandatory!"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Quantity per unit",
+                        dataIndex: "quantityPerUnit"
+                    },
+                    {
+                        xtype: "combo",
+                        mode: "local",
+                        width: 150,
+                        fieldLabel: "Select Category",
+                        dataIndex: "categoryId", // product record
+                        store: new Ext.data.Store({
+                            autoLoad: true,
+                            url: "http://172.27.40.72:82/categories",
+                            reader: new Ext.data.JsonReader({
+                                fields: [
+                                    {name: "catId", type: "int", mapping: "category_id"},
+                                    {name: "catName", type: "string", mapping: "category_name"}
+                                ]
+                            })
+                        }),
+                        valueField: "catId",
+                        displayField: "catName"
+                            
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Unit price (USD)",
+                        dataIndex: "unitPrice"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Units in stock",
+                        dataIndex: "unitsInStock"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Units on order",
+                        dataIndex: "unitsOnOrder"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Reorder level",
+                        dataIndex: "reorderLevel"
+                    },
+                    {
+                        xtype: "textfield",
+                        fieldLabel: "Discontinued?",
+                        dataIndex: "discontinued"
+                    }
+                ],
+                buttons: [
+                    {
+                        text: "Save",
+                        handler: function(){
+                            if(window.isEditing){
+                                var rec = new Product();
+                                frm.getForm().updateRecord(rec);
+                                productStore.loadData({
+                                    data: [rec.data],
+                                    success: true
+                                }, true);
+                                win.hide();
+                            }
+                            else{
+                                var rec = new Product();
+                                frm.getForm().updateRecord(rec);
+                                productStore.insert(0, rec);
+                                win.hide();
+                            }
+                        }
+                    }
+                ]
+                
+            });
+
+            var win = new Ext.Window({
+                title: "Enter product details",
+                layout: "fit",
+                width: 300,
+                height: 325,
+                items: [ frm ],
+                closeAction: "hide",
+                modal: true,
+                resizable: false
+            });           
+
+            var tb = new Ext.Toolbar({
+                items : [
+                    {
+                        xtype: "button",
+                        text: "Add new",
+                        iconCls: "myIconClass",
+                        handler: function(){
+                            window.isEditing = false;
+                            var rec = new Product({
+                                productName: ""
+                            });
+                            frm.getForm().loadRecord(rec);
+                            win.show();
+                        }
+                    },
+                    "-",
+                    {
+                        xtype: "button",
+                        text: "Edit selected",
+                        handler: function(){
+                            window.isEditing = true;
+                            var rec = grid.getSelectionModel().getSelected();
+
+                            if(rec){
+                                
+                                frm.getForm().loadRecord(rec);  
+                                win.show();
+                            }
+                            else{
+                                Ext.Msg.alert("Northwind", 
+                                    "Please select a row from the grid");
+                            }
+                        }
+                    },
+                    "-", // separator
+                    {
+                        xtype: "button",
+                        text: "Delete selected",
+                        handler: function(){
+                            var rec = grid.getSelectionModel().getSelected();
+                            if(rec){
+                                Ext.Msg.confirm(
+                                    "Northwind",
+                                    "Are you sure to delete the selected record?",
+                                    function(yesno){
+                                        if(yesno=="yes"){
+                                            productStore.remove(rec);
+                                        }
+                                    });     
+                            }
+                            else{
+                                Ext.Msg.alert("Northwind",
+                                    "Please selected a recrod in the grid for deletion!");
+                            }
+                            
+                            
+                        }
+                    }
+                ]
+            });
+            
+
+            Ext.onReady(function(){
+                tb.render("buttonsDiv");
+                
+                new Ext.Viewport({
+                    layout: "border",
+                    items: [
+                        {
+                            region: "north",
+                            contentEl: "northDiv",
+                            bodyStyle: {
+                                padding: "20px"   
+                            }
+                        },
+                        grid
+                    ]
+                }); 
+            });
+        </script>
+    </head>
+    <body>
+        <div id="northDiv">
+            <div style="font-size: xx-large">
+                Northwind Inc. - Product details</div>
+            <p>The products are listed below. Double click to edit</p>
+            
+            <div id="buttonsDiv"></div>
+            
+            <p>Adding or deleting does not work yet!</p>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+    
+        <style>
+            #headerDiv {
+                padding: 15px;   
+            }
+            #headerDiv img {
+                float: left;
+                margin-right: 15px;
+                height: 65px;
+                border-radius: 5px;
+                box-shadow: 2px 2px 10px 3px #000;
+            }
+            #headerDiv h1 {
+                font-size: xx-large;   
+            }
+            .centerPanel {
+                padding: 30px;   
+                background-color: rgba(203, 234, 244, 0.37);
+            }
+        </style>
+        
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                
+                new Ext.Viewport({
+                    layout: 'border',
+                    items: [
+                        {
+                            xtype: 'panel',
+                            region: 'north',
+                            height: 100,
+                            contentEl: 'headerDiv'
+                            
+                        },
+                        {
+                            xtype: 'panel',
+                            region: 'west',
+                            width: 150,
+                            collapsible: true,
+                            title: 'Navigation pane',
+                            split:true
+                        },
+                        {
+                            region: 'center' ,
+                            collapsible: true,
+                            autoLoad: 'dummy-content.html',
+                            bodyCssClass: 'centerPanel'
+                        }
+                    ]
+                });
+            });
+        </script>
+    
+    </head>
+    <body>
+        <div id="headerDiv">
+            <img src="D:\Learning\kartik\ExtJS\day2\images\vinod.png" />
+            <h1>Extjs training by Vinod</h1>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+

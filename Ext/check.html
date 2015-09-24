@@ -1,0 +1,253 @@
+<html>
+<head>
+<title>Ext prac</title>
+<link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+<style>
+ .centerPanel {
+                padding: 30px;   
+                background-color: rgba(203, 234, 244, 0.37);
+            }
+#headerDiv h1{
+				
+				font-size:xx-large;
+					color:blue;
+	
+			}
+			
+  #headerDiv img {
+                float: left;
+                margin-right: 15px;
+                height: 65px;
+                border-radius: 10px;
+                box-shadow: 2px 2px 10px 3px #000;
+            }
+
+</style>
+<script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+
+<script type="text/javascript">
+
+	Ext.onReady(function() {
+		
+//			Ext.Msg.alert('Gomzy', 'sup?.');
+				
+			
+	/*		Ext.Msg.confirm("Is it","working",function(a)
+			
+							{
+								if(a=='yes')
+								{
+									console.log('yo');
+								}
+								
+								else {console.log('check again');}
+							
+							
+							}
+							
+			
+							)
+				
+				console.log('Ready');
+				}); */
+	
+		/*	Ext.Msg.show( {
+			
+							title:"SCM",
+							modal: true,
+							msg:"Are you a registered member",
+							width:450,
+							buttons:Ext.Msg.YESNO,
+							icon: Ext.Msg.QUESTION,
+							fn: function(a){
+								console.log('button '+a+' was pressed');
+								}
+							}
+							
+						);
+							console.log('wrking');
+		*/
+			/*Ext.namespace("course");
+			
+			course.Module = 
+			Ext.extend(Object,{
+			
+							title:function(){
+								
+								console.log("inside the course.module.title()");			
+												
+							}
+		
+						});
+				var mod1=new course.Module();
+				mod1.title();
+				*/
+		/*
+			Ext.namespace("co.vinod");
+                co.vinod.Person = Ext.extend(Object, {
+                    
+                    constructor: function(config){
+                        
+                        Ext.applyIf(config, {
+                            name: "",
+                            city: "Bangalore",
+                            email: ""
+                        });
+						Ext.apply(this, config);
+                        
+                    },
+                    
+                    log: function(){
+                        console.log("Name = " + this.name
+                            + ", City = " + this.city 
+                            + ", Email = " + this.email);
+                    }
+
+                });
+              
+                var p2 = new co.vinod.Person({name: "Vinod"});
+                p2.log();
+			
+				
+				var p1= { 
+							dur: 2,
+							name:"SCM1"
+				
+						};
+				
+				Ext.applyIf(p1,{dur:4,name:""},{dur:8,name:"default"}); //as defined
+				console.log(p1);
+				
+				Ext.apply(p1,{dur:4,name:"jjk"}); //as in Ext.apply
+				console.log(p1);
+				
+				*/
+				
+				//PANEL
+			/*var p = new Ext.Panel({
+			
+					title:"Panel definition",
+					renderTo:"d1",
+					width:1000,
+					height:350,
+					contentEl:"d2",
+					items:[]
+				});
+
+		  Ext.get("btn").on("click", function(){
+		  
+				var o = new Ext.Window({
+				
+					title:"on click fnctnality",
+					width:400,
+					height:300,
+					modal:true,
+					closable:true,
+					draggable:true
+				});
+				
+				
+			o.show();
+		});*/
+		
+		
+/*		new Ext.Viewport({ 
+		layout:'border',
+		items:[
+		
+				{
+					xtype:'panel',
+					region:'north',
+					height:'100',
+					contentEl:'headerDiv'
+				},
+				
+				{
+					xtype:'panel',
+					region:'west',
+					width:'150',
+					collapsible:true,
+					title:'Trial Pane',
+					split:true
+				},
+				{
+                    region: 'center' ,
+                    collapsible: true,
+                    //autoLoad:'dummy-content.html',
+                    bodyCssClass: 'centerPanel'
+				}
+				
+		
+		
+		
+		
+		]
+		
+							
+		
+		
+		});
+		
+	*/	
+		
+	
+              
+                
+                new Ext.Viewport({
+                    layout: 'anchor',
+                    items: [
+                        {
+                            title: 'First panel',
+                            anchor: '-100',//offset anchor, complete width minus  100 pixels
+                            height: 150,
+							contentEl:'header'
+                        },
+                        {
+                            title: 'Second panel',
+                            x:'50% 30%'//50 % of container's width and 30% of the container's height
+                        }
+                    ]
+                });
+            
+            
+		
+		  
+		  
+	});//On ready closing brackets.
+				
+				
+</script>
+</head>
+
+<body>
+
+
+	<h1 id="header">Ext Prac</h1>
+
+	<!--<div id="d1">
+		<div id="d2" style="color:blue">
+		Inherent panel being rendered to d1	
+	
+		
+		</div>
+	</div>
+	
+	<button id="btn" style="align:center">Open Window</button>	
+	
+	
+	
+	
+	
+	<div id="headerDiv">
+            <img src="D:\Learning\kartik\ExtJS\day2\images\tiger.jpg" />
+            <h1> SCM module implementation</h1>
+        </div>
+	
+
+-->
+</body>
+</html>
+
+
+

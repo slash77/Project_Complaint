@@ -1,0 +1,71 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+    
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                
+                Ext.ns("vinod");
+                vinod.Person = Ext.extend(Object, {
+                    constructor: function(cfg){
+                        console.log("Person() called");
+                        cfg=Ext.applyIf(cfg, {
+                            name: "",
+                            city: "Bangalore"
+                        });
+                        Ext.applyIf(this, cfg);
+                        
+                        vinod.Person.superclass
+                            .constructor.call(this);
+                    }
+                });
+                
+                vinod.Student = Ext.extend(vinod.Person, {
+                    constructor: function(cfg){
+                        console.log("Student() called");
+                        cfg = Ext.applyIf(cfg, {
+                            subject: "",
+                            grade: ""
+                        });
+                        Ext.applyIf(this, cfg);
+                        vinod.Student.superclass
+                            .constructor.call(this);
+                    }
+                });
+              
+                var s1 = new vinod.Student({
+                    name: "Kishore",
+                    subject: "Maths",
+                    grade: "A+",
+                    city: "Bangalore"
+                });
+                
+                console.log(s1.name);
+                console.log(s1.city);
+                console.log(s1.subject);
+                console.log(s1.grade);
+                
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

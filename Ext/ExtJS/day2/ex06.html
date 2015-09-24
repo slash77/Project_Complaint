@@ -1,0 +1,67 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+        
+        <script type="text/javascript">
+        
+            var ac;
+            
+            Ext.onReady(function(){
+                ac = new Ext.Panel({
+                    renderTo: Ext.getBody(),
+                    width: 700,
+                    height: 500,
+                    layout: 'accordion',
+                    defaults: {
+                        height: 200,
+                        autoScroll: false
+                    },
+                    items : [
+                        new Ext.TabPanel({
+                            listeners: {
+                                added: function(p){
+                                    console.log("A tab is added");
+                                }
+                            },
+                            items:[
+                                new Ext.Panel({
+                                    title: 'Tab1'
+                                }),
+                                new Ext.Panel({
+                                    title: 'Tab2'
+                                })
+                            ]
+                        }),
+                        {
+                            xtype: 'panel',
+                            title: 'First panel',
+                            contentEl: 'd1'
+                        },
+                        {
+                            title: 'Second panel',
+                           //autoLoad: 'dummy-content.html'
+                        },
+                        {
+                            title: 'Third panel',
+                            //autoLoad: 'lion.html'
+                        }
+                    ]
+                });
+           
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+        <div id="main"></div>
+        <div id="d1">A basic tab container. TabPanels can be used exactly like a standard Ext.Panel for layout purposes, but also have special support for containing child Components (items) that are managed using a CardLayout layout manager, and displayed as separate tabs.</div>
+    </body>
+</html>

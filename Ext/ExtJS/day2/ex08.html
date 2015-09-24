@@ -1,0 +1,63 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+       <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+          
+
+	<script type="text/javascript">
+		  Ext.onReady(function(){
+              
+                var Person = Ext.data.Record.create([
+                    {
+                        name: "id",
+                        type: "int",
+                        mapping: "_id"
+                    },
+                    {
+                        name: "firstname",
+                        mapping : "first_name"
+                    }, 
+                    {
+                        name: "lastname",
+                        mapping: "last_name"
+                    }, 
+                    "city", 
+                    "phone"
+                ]);
+                
+                var p1 = new Person({
+                    id: 100, 
+                    firstname: "Raghavendra",
+                    lastname: "Kishhore",
+                    city: "Bangalore"
+                });
+                
+                
+                var contactsStore = new Ext.data.JsonStore({
+                    url: 'http://localhost/persons',
+                    autoLoad: false,
+                    writer: new Ext.data.JsonWriter({
+                        encode: true
+                    }),
+                    root: "data"
+                });     
+                
+                
+                debugger;
+                contactsStore.add(p1);
+                //contactsStore.save();
+                
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        <link type="text/css"
+            rel="stylesheet"
+              href="../ext-3.2.1/resources/css/ext-all.css" />
+        <style>
+            #d1 {
+                margin: 50px;
+                
+                
+            }
+        </style>
+               
+               
+        
+        <script type="text/javascript"
+            src="../ext-3.2.1/adapter/ext/ext-base.js">
+        </script>
+        <script type="text/javascript"
+            src="../ext-3.2.1/ext-all.js">
+        </script>
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+            
+                var p1 = new Ext.Panel({
+                    title: "Extjs training",
+                    renderTo: "d1",
+                    width: 400,
+                    height: 300,
+                    contentEl: "d2",
+                    items: []
+                });
+           
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+        <hr />
+        <p>
+        This is an example of using Panels in Extjs.
+            In Extjs, there is a class called Ext.Panel
+        </p>
+        
+        <div id="d1">
+        
+            <div id="d2">When either specifying child items of a Panel, or dynamically adding Components to a Panel, remember to consider how you wish the Panel to arrange those child elements, and whether those child elements need to be sized using one of Ext's built-in layout schemes. By default, Panels use the ContainerLayout scheme. This simply renders child components, appending them one after the other inside the Container, and does not apply any sizing at all.</div>
+        
+        </div>
+        
+        <p style="text-align: center">
+        &copy; 2015 - All rights reserved
+        </p>
+    </body>
+</html>
+
+
+
+
+
+

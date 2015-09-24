@@ -1,0 +1,117 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+        
+        <style>
+            body {
+                padding: 20px;   
+            }
+        </style>
+        
+        <script type="text/javascript">
+        
+            Ext.onReady(function(){
+                var frmPanel = new Ext.form.FormPanel({
+                    //url: 'http://vinod.co/rest/newcontact.php',
+                    renderTo: "d1",
+                    title: 'Enter a contact data',
+                    bodyStyle: {
+                        padding: "10px"  
+                    },
+                    width: 350,
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: 'First name',
+                            dataIndex: "firstName",
+                            name: 'first_name',
+                            allowBlank: false,
+                            blankText: 'Firstname is mandatory'
+                        },
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: 'Last name',
+                            name: 'last_name',
+                            dataIndex: "lastName"
+                        },
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: 'City',
+                            name: 'city'
+                        },
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: 'Phone',
+                            name: 'phone'
+                        },
+                        {
+                            xtype: 'buttongroup',
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    text: 'Save',
+                                    handler: function(){
+                                        frmPanel.getForm()
+                                            .submit({
+                                            success: function(){
+                                                frmPanel.getForm().reset();
+                                                Ext.Msg.alert('VinApp', 'Data saved!');     
+                                            },
+                                            error: function(){
+                                                console.dir(arguments);
+                                            }
+                                        });
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    text: 'Cancel',
+                                    handler: function(){
+
+                                    }
+                                }
+                            ]
+                        }
+                        
+                    ]
+                });
+                var Person = Ext.data.Record.create([
+                    { name: "id", type: "int", mapping: "_id"},
+                    { name: "firstName", type: "string", mapping: "first_name" },
+                    { name: "lastName", type: "string", mapping: "last_name" },
+                    { name: "city", type: "string" },
+                    { name: "phone", type: "string" }
+                ]);
+                var p1 = new Person({
+                    id			: 20,
+                    firstName	: "Vinod",
+                    lastName	: "Kumar",
+                    city		: "Bangalore",
+                    phone		: "9731424784"
+                });
+                
+                frmPanel.getForm().loadRecord(p1);
+            
+            });
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+        
+        <hr />
+        
+        <div id="d1"></div>
+    </body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,101 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    <link type="text/css"  rel="stylesheet" href="D:\Learning\Ext\ext-3.2.1\resources\css\ext-all.css"></link>
+        <script src="D:\Learning\Ext\ext-3.2.1\adapter\ext\ext-base.js"></script>
+		<script src="D:\Learning\Ext\ext-3.2.1\ext-all.js"></script>
+        
+        <script type="text/javascript">
+            
+            var sayHello = function(v){
+                var str = '<a href="#" onclick="'
+                    +'javascript:alert(\'Hello, '+v+'\')">'
+                    +v+"</a>";
+                return str;
+            }
+            
+            var fnColorIt = function(v){
+                var str = "<span style='color: ";
+                if(v.length>5){
+                    str += "blue";
+                }
+                else{
+                    str += "red";
+                }
+                str += "'>"+v+"</span>";
+                return str;
+            }
+            Ext.onReady(function(){
+                
+                var contactsStore = new Ext.data.JsonStore({
+                    url: 'http://vinod.co/rest/contacts.php',
+                    autoLoad: true,
+                    fields: [
+                        {
+                            name: "id",
+                            type: "int"
+                        }, 
+                        "first_name",
+                        {
+                            name: "lastname",
+                            mapping: "last_name"
+                        }, 
+                        "city", "phone"
+                    ]
+                });
+                
+                var contactsGrid = new Ext.grid.GridPanel({
+                    renderTo: "data",
+                    store: contactsStore,
+                    height: 400,
+                    colModel: new Ext.grid.ColumnModel({
+                        defaults: {
+                            sortable: true
+                        },
+                        columns: [
+                            {
+                                header: 'First name',
+                                dataIndex: 'first_name',
+                                width: 120,
+                                renderer: sayHello
+                            },
+                            {
+                                header: 'Last name',
+                                dataIndex: 'lastname',
+                                width: 120,
+                                renderer: fnColorIt
+                            },
+                            {
+                                header: 'City',
+                                dataIndex: 'city',
+                                width: 200,
+                                renderer: fnColorIt
+                            },
+                            {
+                                header: 'Phone number',
+                                dataIndex: 'phone',
+                                width: 150
+                            }
+                        ]
+                    })
+                });
+              
+           
+            
+            });
+
+            
+        </script>
+        
+        <style>
+            body {
+                margin: 20px;   
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+        <hr />
+        <div id="data"></div>
+    </body>
+</html>

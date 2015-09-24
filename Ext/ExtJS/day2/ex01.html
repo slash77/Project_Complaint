@@ -1,0 +1,38 @@
+<html>
+    <head>
+    <title>Extjs demos</title>
+    
+        
+        <script type="text/javascript">
+        
+            var Test = (function(){
+                var instance = null;
+                var createInstance = function(){
+                    if(instance==null){
+                        instance = {};
+                        instance.sayHello = function(){
+                            console.log("Hello, World!");  
+                        };
+                    }
+                    return instance;
+                };
+                return {
+                    newInstance: function(){
+                        return createInstance();
+                    }
+                }
+            })();
+            
+            var t1 = Test.newInstance(),
+                t2 = Test.newInstance();
+            
+            console.log("t1==t2 is " + (t1==t2));
+            
+        </script>
+        
+        
+    </head>
+    <body>
+        <h1>Extjs demos</h1>
+    </body>
+</html>
